@@ -1,22 +1,11 @@
 package RemoteRXComponents.Table;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class DataTable<T extends Row> {
     private final ArrayList<T> rows = new ArrayList<T>();
-
-    public DataTable(Class<T> type) {
-
-//        for (final Field field : type.getDeclaredFields()) {
-//            final String fieldName = field.getName();
-//            final String s = field.getType().toString();
-//            if (s.equals("int")) {
-//            } else if (s.equals("String")) {
-//            }
-//        }
-    }
 
     public View getView() {
         return new DataView<T>(this);
@@ -27,6 +16,10 @@ public class DataTable<T extends Row> {
     }
 
     public T getRow(int row) {
-        return rows.get(row-1);
+        return rows.get(row);
+    }
+
+    public void applySort(final Comparator<T> sort) {
+        Collections.sort(rows, sort);
     }
 }

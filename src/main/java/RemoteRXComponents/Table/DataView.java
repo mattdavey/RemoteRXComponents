@@ -1,29 +1,62 @@
 package RemoteRXComponents.Table;
 
-/**
- * Comments here
- */
+import java.util.ArrayList;
+
 public class DataView<T extends Row> implements View {
-    public DataView(DataTable<T> tDataTable) {
-    }
+    private final DataTable<T> dataTable;
+    private int viewPointSize;
+    private int begin=0, end=0;
+    private final ArrayList<T> viewport = new ArrayList<>();
 
-    @Override
-    public void applyFilter(Filter name) {
-
+    public DataView(final DataTable<T> dataTable) {
+        this.dataTable = dataTable;
     }
 
     @Override
     public int getCount() {
-        return 0;
+        return viewport.size();
     }
 
     @Override
-    public View setRowWindow(int rowCount) {
+    public View setViewPortSize(final int rowCount) {
+        this.viewPointSize = rowCount;
+        this.end = rowCount-1;
         return this;
     }
 
     @Override
     public View connect() {
-        return null;
+        for (int rows=begin; rows <= end; rows++) {
+            viewport.add(dataTable.getRow(rows));
+        }
+
+        return this;
+    }
+
+    @Override
+    public T getRow(int row) {
+        return viewport.get(row);
+    }
+
+    @Override
+    public void forward(final int count) {
+        for (int row=0; row < count; row++) {
+            viewport.remove(begin+row);
+            viewport.add(dataTable.getRow(end + row + 1));
+        }
+
+        begin += count;
+        end += count;
+    }
+
+    @Override
+    public void back(int count) {
+        for (int row=0; row < count; row++) {
+            viewport.remove(viewport.size()-1);
+            viewport.add(0, dataTable.getRow(begin - row - 1));
+        }
+
+        begin -= count;
+        end -= count;
     }
 }
