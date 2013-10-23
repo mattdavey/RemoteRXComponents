@@ -16,4 +16,14 @@ public class SomeRow implements Row {
         this.side = side;
         this.notional = notional;
     }
+
+    @Override
+    public int getId() {
+        return id;
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return new SomeRow(id, instrument, counterparty, side, notional);
+    }
 }

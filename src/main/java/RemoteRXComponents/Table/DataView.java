@@ -27,7 +27,9 @@ public class DataView<T extends Row> implements View {
     @Override
     public View connect() {
         for (int rows=begin; rows <= end; rows++) {
-            viewport.add(dataTable.getRow(rows));
+            final T obj = dataTable.getRow(rows);
+            viewport.add(obj);
+
         }
 
         return this;
